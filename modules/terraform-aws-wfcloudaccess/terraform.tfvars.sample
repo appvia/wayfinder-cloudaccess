@@ -6,9 +6,9 @@ oidc_issuer = "wayfinder.run"
 oidc_audience = "wayfinder:yourtenant"
 oidc_subject = "wayfinder:yourtenant:cloudaccess-name"
 
-# Choose the policies to bind to the identity, this example uses the AdministratorAccess policy:
+# Choose the policies to bind to the identity, this example uses the PowerUserAccess policy:
 # policy_assignments = [
-#     "arn:aws:iam::aws:policy/AdministratorAccess"
+#     "arn:aws:iam::aws:policy/PowerUserAccess"
 # ]
 
 # Set to false if the trust has already been provisioned in the account (it can only be provisioned once)

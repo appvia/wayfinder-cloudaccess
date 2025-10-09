@@ -21,7 +21,7 @@ resource "azurerm_federated_identity_credential" "federated_identity_oidc" {
   name                = "${local.resource_prefix}federated-id-oidc${local.resource_suffix}"
   resource_group_name = azurerm_resource_group.federated_identity.name
   parent_id           = azurerm_user_assigned_identity.federated_identity.id
-  issuer              = var.oidc_issuer
+  issuer              = "https://${var.oidc_issuer}"
   audience            = [var.oidc_audience]
   subject             = var.oidc_subject
 
