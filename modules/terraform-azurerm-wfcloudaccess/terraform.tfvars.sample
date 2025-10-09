@@ -1,0 +1,21 @@
+# Choose the subscription you want to provide access to
+subscription = "12345678-90ab-cdef-1234-567890abcdef"
+# Choose the region in which to provision the federated identity (this does not have to be the same
+# region you will use for your resources)
+region = "uksouth"
+
+# Set the Wayfinder OIDC issuer, audience and subject
+oidc_issuer = "wayfinder.run"
+oidc_audience = "wayfinder:yourtenant"
+oidc_subject = "wayfinder:yourtenant:cloudaccess-name"
+
+# Choose the role assignments to bind to the identity, this example uses the Contributor role:
+# role_assignments = [
+#   {
+#     scope = "/subscriptions/12345678-90ab-cdef-1234-567890abcdef"
+#     role_definition_id = "providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+#   }
+# ]
+
+# Set suffix if provisioning multiple cloud access identities in a single subscription
+resource_suffix = ""

@@ -1,0 +1,15 @@
+# Choose the project you want to provide access to
+project = "your-gcp-project-id"
+
+# Set the Wayfinder OIDC issuer, audience and subject
+oidc_issuer = "wayfinder.run"
+oidc_audience = "wayfinder:yourtenant"
+oidc_subject = "wayfinder:yourtenant:cloudaccess-name"
+
+# Choose the access you want to bind at a project level:
+# role_assignments = [
+#   "roles/editor"
+# ]
+
+# Set suffix if provisioning multiple cloud access identities in a single project
+resource_suffix = ""
