@@ -56,3 +56,15 @@ variable "tags" {
   description = "A map of tags to add to all resources created."
   type        = map(string)
 }
+
+variable "enable_state_store" {
+  type        = bool
+  default     = false
+  description = "Create an S3 bucket for Terraform state storage"
+}
+
+variable "state_store_bucket_name" {
+  type        = string
+  default     = ""
+  description = "Name of the S3 bucket for state storage. Required if enable_state_store is true."
+}

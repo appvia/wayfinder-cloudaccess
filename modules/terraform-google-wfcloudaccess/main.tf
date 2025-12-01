@@ -73,3 +73,29 @@ resource "google_project_iam_member" "role_assignments" {
   role    = each.value
   member  = "serviceAccount:${google_service_account.wayfinder.email}"
 }
+
+resource "google_storage_bucket" "state_store" {
+  count                  = var.enable_state_store ? 1 : 0
+  name                   = var.state_store_bucket_name
+  location               = var.state_store_location
+  project                = data.google_project.project.project_id
+  uniform_bucket_level_access = true
+
+  versioning {
+    enabled = true
+  }
+
+  lifecycle {
+    precondition {
+      condition     = !var.enable_state_store || var.state_store_bucket_name != ""
+      error_message = "state_store_bucket_name is required when enable_state_store is true"
+    }
+  }
+}
+
+resource "google_storage_bucket_iam_member" "state_store" {
+  count      = var.enable_state_store ? 1 : 0
+  bucket     = google_storage_bucket.state_store[0].name
+  role       = "roles/storage.objectAdmin"
+  member     = "serviceAccount:${google_service_account.wayfinder.email}"
+}

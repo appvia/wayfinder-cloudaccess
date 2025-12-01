@@ -44,3 +44,21 @@ variable "role_assignments" {
   description = "List of project roles to bind to the service account"
   default     = []
 }
+
+variable "enable_state_store" {
+  type        = bool
+  default     = false
+  description = "Create a GCS bucket for Terraform state storage"
+}
+
+variable "state_store_bucket_name" {
+  type        = string
+  default     = ""
+  description = "Name of the GCS bucket for state storage. Required if enable_state_store is true."
+}
+
+variable "state_store_location" {
+  type        = string
+  default     = "US"
+  description = "Location for the GCS bucket (e.g., US, EU, us-central1)"
+}
