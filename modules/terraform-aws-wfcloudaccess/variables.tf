@@ -40,7 +40,7 @@ variable "oidc_subject" {
 }
 
 variable "policy_assignments" {
-  type = list(string)
+  type        = list(string)
   description = "List of ARNs of AWS policies to bind to the IAM role"
   default     = []
 }

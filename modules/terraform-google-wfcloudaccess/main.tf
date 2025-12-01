@@ -63,7 +63,7 @@ resource "google_service_account_iam_member" "wayfinder" {
   service_account_id = google_service_account.wayfinder.name
   role               = "roles/iam.serviceAccountTokenCreator"
   # Allow access to the service account from the workload identity pool, matching the subject (mapped above from the Wayfinder OIDC 'sub' claim)
-  member             = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.federated.workload_identity_pool_id}/subject/${var.oidc_subject}"
+  member = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.federated.workload_identity_pool_id}/subject/${var.oidc_subject}"
 }
 
 resource "google_project_iam_member" "role_assignments" {
@@ -75,10 +75,10 @@ resource "google_project_iam_member" "role_assignments" {
 }
 
 resource "google_storage_bucket" "state_store" {
-  count                  = var.enable_state_store ? 1 : 0
-  name                   = var.state_store_bucket_name
-  location               = var.state_store_location
-  project                = data.google_project.project.project_id
+  count                       = var.enable_state_store ? 1 : 0
+  name                        = var.state_store_bucket_name
+  location                    = var.state_store_location
+  project                     = data.google_project.project.project_id
   uniform_bucket_level_access = true
 
   versioning {
@@ -94,8 +94,8 @@ resource "google_storage_bucket" "state_store" {
 }
 
 resource "google_storage_bucket_iam_member" "state_store" {
-  count      = var.enable_state_store ? 1 : 0
-  bucket     = google_storage_bucket.state_store[0].name
-  role       = "roles/storage.objectAdmin"
-  member     = "serviceAccount:${google_service_account.wayfinder.email}"
+  count  = var.enable_state_store ? 1 : 0
+  bucket = google_storage_bucket.state_store[0].name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:${google_service_account.wayfinder.email}"
 }

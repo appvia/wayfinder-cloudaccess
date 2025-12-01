@@ -1,5 +1,5 @@
 locals {
-  resource_suffix   = var.resource_suffix != "" ? "-${var.resource_suffix}" : ""
+  resource_suffix = var.resource_suffix != "" ? "-${var.resource_suffix}" : ""
 }
 
 data "aws_caller_identity" "current" {}
@@ -72,8 +72,8 @@ data "aws_iam_policy_document" "assume_role_with_oidc" {
 }
 
 resource "aws_iam_role" "role" {
-  name                 = "${var.iam_role_name}${var.resource_suffix}"
-  description          = "Wayfinder IAM role"
+  name        = "${var.iam_role_name}${var.resource_suffix}"
+  description = "Wayfinder IAM role"
 
   permissions_boundary = var.role_permissions_boundary_arn
 

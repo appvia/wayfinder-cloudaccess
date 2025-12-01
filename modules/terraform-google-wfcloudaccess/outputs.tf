@@ -15,7 +15,7 @@ output "gcp_project" {
 
 output "gcp_workload_identity_pool_id" {
   description = "ID of GCP Workload Identity Pool to use as spec.gcp.workloadIdentityPoolID of your cloud access"
-  value       = google_iam_workload_identity_pool.federated.workload_identity_pool_id 
+  value       = google_iam_workload_identity_pool.federated.workload_identity_pool_id
 }
 
 output "gcp_workload_identity_provider_id" {

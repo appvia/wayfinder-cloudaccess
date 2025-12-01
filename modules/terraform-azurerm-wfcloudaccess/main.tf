@@ -10,7 +10,7 @@ resource "azurerm_resource_group" "federated_identity" {
   name     = "${local.resource_prefix}federated-id${local.resource_suffix}"
   location = var.region
 }
-  
+
 resource "azurerm_user_assigned_identity" "federated_identity" {
   location            = azurerm_resource_group.federated_identity.location
   name                = "${local.resource_prefix}federated-id${local.resource_suffix}"
@@ -46,13 +46,13 @@ resource "azurerm_role_assignment" "role_assignments" {
 }
 
 resource "azurerm_storage_account" "state_store" {
-  count               = var.enable_state_store ? 1 : 0
-  name                = var.state_store_storage_account_name
-  resource_group_name = azurerm_resource_group.federated_identity.name
-  location            = azurerm_resource_group.federated_identity.location
-  account_tier        = "Standard"
+  count                    = var.enable_state_store ? 1 : 0
+  name                     = var.state_store_storage_account_name
+  resource_group_name      = azurerm_resource_group.federated_identity.name
+  location                 = azurerm_resource_group.federated_identity.location
+  account_tier             = "Standard"
   account_replication_type = "LRS"
-  account_kind        = "StorageV2"
+  account_kind             = "StorageV2"
 
   lifecycle {
     precondition {
@@ -67,10 +67,10 @@ resource "azurerm_storage_account" "state_store" {
 }
 
 resource "azurerm_storage_container" "state_store" {
-  count                  = var.enable_state_store ? 1 : 0
-  name                   = var.state_store_container_name
-  storage_account_id     = azurerm_storage_account.state_store[0].id
-  container_access_type  = "private"
+  count                 = var.enable_state_store ? 1 : 0
+  name                  = var.state_store_container_name
+  storage_account_id    = azurerm_storage_account.state_store[0].id
+  container_access_type = "private"
 }
 
 resource "azurerm_role_assignment" "state_store_access" {

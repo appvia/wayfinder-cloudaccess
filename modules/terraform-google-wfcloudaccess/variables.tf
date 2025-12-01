@@ -40,7 +40,7 @@ variable "oidc_subject" {
 }
 
 variable "role_assignments" {
-  type = list(string)
+  type        = list(string)
   description = "List of project roles to bind to the service account"
   default     = []
 }
