@@ -1,5 +1,5 @@
 locals {
-  resource_suffix   = var.resource_suffix != "" ? "-${var.resource_suffix}" : ""
+  resource_suffix = var.resource_suffix != "" ? "-${var.resource_suffix}" : ""
 }
 
 data "aws_caller_identity" "current" {}
@@ -72,8 +72,8 @@ data "aws_iam_policy_document" "assume_role_with_oidc" {
 }
 
 resource "aws_iam_role" "role" {
-  name                 = "${var.iam_role_name}${var.resource_suffix}"
-  description          = "Wayfinder IAM role"
+  name        = "${var.iam_role_name}${var.resource_suffix}"
+  description = "Wayfinder IAM role"
 
   permissions_boundary = var.role_permissions_boundary_arn
 
@@ -87,4 +87,90 @@ resource "aws_iam_role_policy_attachment" "policy_assignments" {
 
   role       = aws_iam_role.role.name
   policy_arn = each.value
+}
+
+resource "aws_s3_bucket" "state_store" {
+  count = var.enable_state_store ? 1 : 0
+
+  bucket = var.state_store_bucket_name
+
+  tags = var.tags
+
+  lifecycle {
+    precondition {
+      condition     = !var.enable_state_store || var.state_store_bucket_name != ""
+      error_message = "state_store_bucket_name is required when enable_state_store is true"
+    }
+  }
+}
+
+resource "aws_s3_bucket_versioning" "state_store" {
+  count = var.enable_state_store ? 1 : 0
+
+  bucket = aws_s3_bucket.state_store[0].id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "state_store" {
+  count = var.enable_state_store ? 1 : 0
+
+  bucket = aws_s3_bucket.state_store[0].id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "state_store" {
+  count = var.enable_state_store ? 1 : 0
+
+  bucket = aws_s3_bucket.state_store[0].id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+data "aws_iam_policy_document" "state_store_access" {
+  count = var.enable_state_store ? 1 : 0
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:ListBucket"
+    ]
+
+    resources = [
+      aws_s3_bucket.state_store[0].arn
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:DeleteObject"
+    ]
+
+    resources = [
+      "${aws_s3_bucket.state_store[0].arn}/*"
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "state_store_access" {
+  count = var.enable_state_store ? 1 : 0
+
+  name   = "${var.iam_role_name}${var.resource_suffix}-state-store-access"
+  role   = aws_iam_role.role.id
+  policy = data.aws_iam_policy_document.state_store_access[0].json
 }

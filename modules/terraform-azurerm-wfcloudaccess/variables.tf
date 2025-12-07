@@ -41,3 +41,21 @@ variable "role_assignments" {
   description = "List of role assignments to create. Each object should contain a scope and role_definition_id."
   default     = []
 }
+
+variable "enable_state_store" {
+  type        = bool
+  default     = false
+  description = "Create Azure storage account and container for Terraform state storage"
+}
+
+variable "state_store_storage_account_name" {
+  type        = string
+  default     = ""
+  description = "Name of the Azure storage account. Required if enable_state_store is true."
+}
+
+variable "state_store_container_name" {
+  type        = string
+  default     = ""
+  description = "Name of the blob container for state storage. Required if enable_state_store is true."
+}
